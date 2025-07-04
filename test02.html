@@ -37,7 +37,7 @@
       <!-- ティラノサウルスの3Dモデル -->
       <a-asset-item id="trex" src="./assets/glb/t-rex.glb"></a-asset-item>
       <!-- 恐竜の咆哮（ほえる音） -->
-      <audio id="roar" src="./assets/mp3/t-rex.mp3" preload="auto"></audio>
+      <audio id="trexRoar" src="./assets/mp3/t-rex.mp3" preload="auto"></audio>
     </a-assets>
 
     <!-- マーカー「pattern-t-rex」がカメラで見つかったときに出現するオブジェクトたち -->
@@ -57,7 +57,7 @@
       </a-entity>
 
       <!-- 咆哮の音（鳴き声）を再生するプレイヤー -->
-      <a-entity id="trexSound" sound="src: #roar; autoplay: false; loop: true; volume: 1"></a-entity>
+      <a-entity id="trexSound" sound="src: #trexRoar; autoplay: false; loop: true; volume: 1"></a-entity>
     </a-marker>
 
     <!-- カメラ（スマホやPCのカメラでマーカーを映す） -->
