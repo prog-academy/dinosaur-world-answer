@@ -39,7 +39,7 @@
       <!-- トリケラトプスの3Dモデル -->
       <a-asset-item id="tricera" src="./assets/glb/triceratops.glb"></a-asset-item>
 
-      <!-- 恐竜の咆哮（ほえる音） -->
+      <!-- ティラノサウルスとトリケラトプスの咆哮（ほえる音） -->
       <audio id="trexRoar" src="./assets/mp3/t-rex.mp3" preload="auto"></audio>
       <audio id="triceraRoar" src="./assets/mp3/triceratops.mp3" preload="auto"></audio>
     </a-assets>
@@ -60,7 +60,7 @@
         animation-mixer="clip: Armature|TRex_Run">
       </a-entity>
 
-      <!-- 咆哮の音（鳴き声）を再生するプレイヤー -->
+      <!-- ティラノサウルスの音（鳴き声）を再生するプレイヤー -->
       <a-entity id="trexSound" sound="src: #trexRoar; autoplay: false; loop: true; volume: 1"></a-entity>
     </a-marker>
 
@@ -80,7 +80,7 @@
         animation-mixer="clip: Armature|Triceratops_Walk">
       </a-entity>
 
-      <!-- 咆哮の音（鳴き声）を再生するプレイヤー -->
+      <!-- トリケラトプスの音（鳴き声）を再生するプレイヤー -->
       <a-entity id="triceraSound" sound="src: #triceraRoar; autoplay: false; loop: true; volume: 1"></a-entity>
     </a-marker>
 
@@ -107,7 +107,7 @@
       });
     }
 
-    // それぞれのマーカーごとに音声制御をセット
+    // ティラノサウルスとトリケラトプスのマーカーごとに音声制御をセット
     setupMarkerSound("[url$='pattern-t-rex.patt']", "#trexSound");
     setupMarkerSound("[url$='pattern-triceratops.patt']", "#triceraSound");
   </script>

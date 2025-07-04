@@ -36,7 +36,7 @@
     <a-assets>
       <!-- ティラノサウルスの3Dモデル -->
       <a-asset-item id="trex" src="./assets/glb/t-rex.glb"></a-asset-item>
-      <!-- 恐竜の咆哮（ほえる音） -->
+      <!-- ティラノサウルスの咆哮（ほえる音） -->
       <audio id="trexRoar" src="./assets/mp3/t-rex.mp3" preload="auto"></audio>
     </a-assets>
 
@@ -56,7 +56,7 @@
         animation-mixer="clip: Armature|TRex_Run">
       </a-entity>
 
-      <!-- 咆哮の音（鳴き声）を再生するプレイヤー -->
+      <!-- ティラノサウルスの音（鳴き声）を再生するプレイヤー -->
       <a-entity id="trexSound" sound="src: #trexRoar; autoplay: false; loop: true; volume: 1"></a-entity>
     </a-marker>
 
@@ -83,7 +83,7 @@
       });
     }
 
-    // それぞれのマーカーごとに音声制御をセット
+    // ティラノサウルスマーカーの音声制御をセット
     setupMarkerSound("[url$='pattern-t-rex.patt']", "#trexSound");
   </script>
 </body>
