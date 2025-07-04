@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <title>恐竜研究所 - よみがえる恐竜たち</title>
+  <!-- A-Frame（3DやVRの表示に使うライブラリ） -->
+  <script src="https://aframe.io/releases/1.7.0/aframe.min.js"></script>
+  <!-- AR.js（マーカーを使ったARに必要なライブラリ） -->
+  <script src="https://raw.githack.com/AR-js-org/AR.js/master/aframe/build/aframe-ar.js"></script>
+  <!-- animation-mixer（3Dモデルのアニメーションを動かすためのライブラリ） -->
+  <script src="https://unpkg.com/aframe-extras@6.1.1/dist/aframe-extras.min.js"></script>
+</head>
+
+<body>
+  <!-- A-Frameの3D・ARのシーン -->
+  <a-scene embedded arjs>
+    <a-assets>
+      <!-- 使う3Dモデルを読み込み -->
+      <a-asset-item id="trex" src="./assets/glb/t-rex.glb"></a-asset-item>
+    </a-assets>
+
+    <!-- 「hiro」というマーカーが見えたときに表示されるもの -->
+    <a-marker preset="hiro">
+      <!-- 恐竜の3Dモデル -->
+      <!-- 
+        ティラノサウルス本体
+        gltf-model: 恐竜モデルを読み込み
+        position: 地面の位置（x, y, z）＝マーカーの中央に置く
+        rotation: モデルの向き（右を向いて、やや下を向く）
+        scale: モデルの大きさを5%に縮小
+        animation-mixer: 最初に再生する動き（走る）
+      -->
+      <a-entity id="dino" gltf-model="#trex" position="0 0 0" rotation="0 90 -45" scale="0.05 0.05 0.05"
+        animation-mixer="clip: Armature|TRex_Run">
+      </a-entity>
+
+      <!-- セリフの吹き出しグループ -->
+      <a-entity id="dialogGroup" visible="false" position="0 0.9 -1" rotation="-45 0 0">
+        <!-- 吹き出しの黒い背景 -->
+        <a-plane id="bubbleBg" color="black" width="2" height="0.5" position="0 0 0" material="opacity: 0.75"></a-plane>
+        <!-- 吹き出しのしっぽ（三角形） -->
+        <a-entity id="bubbleTail" geometry="primitive: triangle; vertexA: -0.2 0 0; vertexB: 0 -0.2 0; vertexC: 0.2 0 0"
+          position="0 -0.35 0.01" material="color: black; opacity: 0.7; transparent: true">
+        </a-entity>
+        <!-- 吹き出しの中の文字 -->
+        <a-text id="dialogText" value="" align="center" color="white" position="0 0 0.01" width="2"></a-text>
+      </a-entity>
+    </a-marker>
+
+    <!-- カメラの位置（ARで使う） -->
+    <a-entity camera></a-entity>
+  </a-scene>
+
+  <script>
+    // マーカーの要素を取得
+    const marker = document.querySelector("a-marker");
+    // 吹き出しのグループ要素を取得
+    const dialogGroup = document.querySelector("#dialogGroup");
+    // 吹き出しのテキスト要素を取得
+    const dialogText = document.querySelector("#dialogText");
+
+    // 表示するセリフ（今回は1つだけ）
+    const message = "The King Returns."; // 表示するセリフ
+
+    // セリフを消すまでの時間（ミリ秒）
+    const displayTime = 4000; // 4秒間表示
+
+    // セリフを消すタイマーID
+    let dialogTimer = null;
+
+    // マーカーが見つかったときの処理
+    marker.addEventListener("markerFound", () => {
+      // 吹き出しを表示
+      dialogGroup.setAttribute("visible", true);
+      // セリフをセットする
+      dialogText.setAttribute("value", message);
+
+      // セリフを消すタイマーをセット
+      dialogTimer = setTimeout(() => {
+        dialogGroup.setAttribute("visible", false);
+      }, displayTime);
+    });
+
+    // マーカーが見えなくなったときの処理
+    marker.addEventListener("markerLost", () => {
+      // タイマーを解除して
+      if (dialogTimer) {
+        clearTimeout(dialogTimer);
+        dialogTimer = null;
+      }
+      // 吹き出しをすぐに消す
+      dialogGroup.setAttribute("visible", false);
+    });
+  </script>
+</body>
+
+</html>

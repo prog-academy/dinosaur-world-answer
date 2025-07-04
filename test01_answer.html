@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no" />
+  <title>恐竜研究所 - よみがえるティラノサウルス (from HROマーカー to ティラノサウルス)</title>
+
+  <!-- A-Frame（3DやVRを表示するためのライブラリ） -->
+  <script src="https://aframe.io/releases/1.7.0/aframe.min.js"></script>
+
+  <!-- AR.js（マーカーを使ったARを可能にするライブラリ） -->
+  <script src="https://raw.githack.com/AR-js-org/AR.js/master/aframe/build/aframe-ar.js"></script>
+
+  <!-- aframe-extras（恐竜を動かすアニメーション機能などが含まれている） -->
+  <script src="https://unpkg.com/aframe-extras@6.1.1/dist/aframe-extras.min.js"></script>
+
+  <style>
+    /* 画面全体を使う設定 */
+    html,
+    body {
+      margin: 0;
+      padding: 0;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+    }
+  </style>
+</head>
+
+<body>
+  <!-- A-Frameのシーン（3D空間）。この中にARのすべてを入れる -->
+  <a-scene embedded arjs style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;">
+
+    <!-- 使用するモデルや音などの素材を先に読み込む -->
+    <a-assets>
+      <!-- ティラノサウルスの3Dモデル -->
+      <a-asset-item id="trex" src="./assets/glb/t-rex.glb"></a-asset-item>
+    </a-assets>
+
+    <!-- マーカー「pattern-t-rex」がカメラで見つかったときに出現するオブジェクトたち -->
+    <a-marker type="pattern" url="./assets/patt/pattern-t-rex.patt">
+
+      <!-- 恐竜の3Dモデル -->
+      <!-- 
+        ティラノサウルス本体
+        gltf-model: 恐竜モデルを読み込み
+        position: 地面の位置（x, y, z）＝マーカーの中央に置く
+        rotation: モデルの向き（右を向いて、やや下を向く）
+        scale: モデルの大きさを5%に縮小
+        animation-mixer: 最初に再生する動き（走る）
+      -->
+      <a-entity id="dino" gltf-model="#trex" position="0 0 0" rotation="0 90 -45" scale="0.05 0.05 0.05"
+        animation-mixer="clip: Armature|TRex_Run">
+      </a-entity>
+    </a-marker>
+
+    <!-- カメラ（スマホやPCのカメラでマーカーを映す） -->
+    <a-entity camera position="0 0 0"></a-entity> <!-- 位置は原点（必要に応じて動かせる） -->
+  </a-scene>
+</body>
+
+</html>

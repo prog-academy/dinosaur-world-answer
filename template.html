@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no" />
+  <title>恐竜研究所 - よみがえる恐竜たち</title>
+
+  <!-- A-Frame（3DやVRを表示するためのライブラリ） -->
+  <script src="https://aframe.io/releases/1.7.0/aframe.min.js"></script>
+
+  <!-- AR.js（マーカーを使ったARを可能にするライブラリ） -->
+  <script src="https://raw.githack.com/AR-js-org/AR.js/master/aframe/build/aframe-ar.js"></script>
+
+  <!-- aframe-extras（恐竜を動かすアニメーション機能などが含まれている） -->
+  <script src="https://unpkg.com/aframe-extras@6.1.1/dist/aframe-extras.min.js"></script>
+
+  <style>
+    /* 画面全体を使う設定 */
+    html,
+    body {
+      margin: 0;
+      padding: 0;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+    }
+  </style>
+</head>
+
+<body>
+  <!-- A-Frameのシーン（3D空間）。この中にARのすべてを入れる -->
+  <a-scene embedded arjs style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;">
+
+    <!-- 使用するモデルや音などの素材を先に読み込む -->
+    <a-assets>
+      <!-- 各恐竜の3Dモデル -->
+      <a-asset-item id="trex" src="./assets/glb/t-rex.glb"></a-asset-item>
+      <a-asset-item id="tricera" src="./assets/glb/triceratops.glb"></a-asset-item>
+      <a-asset-item id="apato" src="./assets/glb/apatosaurus.glb"></a-asset-item>
+      <a-asset-item id="stego" src="./assets/glb/stegosaurus.glb"></a-asset-item>
+
+      <!-- 恐竜の咆哮（ほえる音） -->
+      <audio id="trexRoar" src="./assets/mp3/t-rex.mp3" preload="auto"></audio>
+      <audio id="triceraRoar" src="./assets/mp3/triceratops.mp3" preload="auto"></audio>
+      <audio id="apatoRoar" src="./assets/mp3/apatosaurus.mp3" preload="auto"></audio>
+      <audio id="stegoRoar" src="./assets/mp3/stegosaurus.mp3" preload="auto"></audio>
+    </a-assets>
+
+    <!-- 恐竜マーカー（4頭） -->
+    <!-- マーカーごとの違いは、ID・モデル・アニメーション・音・吹き出しセリフだけで、それ以外の構造は共通 -->
+    
+    <!-- 1. ティラノサウルス -->
+    <a-marker type="pattern" url="./assets/patt/pattern-t-rex.patt">
+      <a-entity id="trex" gltf-model="#trex" position="0 0 0" rotation="0 90 -45" scale="0.05 0.05 0.05"
+        animation-mixer="clip: Armature|TRex_Run"></a-entity>
+      <a-entity id="trexSound" sound="src: #trexRoar; autoplay: false; loop: true; volume: 1"></a-entity>
+      <a-entity id="dialogTrex" visible="false" position="0 1.2 -0.5" rotation="-30 0 0">
+        <a-plane id="bgTrex" color="black" width="2" height="0.5" position="0 0 0"
+          material="shader: flat; opacity: 0.75; side: double;"></a-plane>
+        <a-entity id="tailTrex" geometry="primitive: triangle; vertexA: -0.2 0 0; vertexB: 0 -0.2 0; vertexC: 0.2 0 0"
+          position="0.6 -0.35 0.01"
+          material="color: black; shader: flat; opacity: 0.7; transparent: true; side: double"></a-entity>
+        <a-text id="textTrex" value="" align="center" color="white" position="0 0 0.01" width="2" opacity="1"
+          side="double"></a-text>
+      </a-entity>
+    </a-marker>
+
+    <!-- 2. トリケラトプス -->
+    <a-marker type="pattern" url="./assets/patt/pattern-triceratops.patt">
+      <a-entity id="tricera" gltf-model="#tricera" position="0 0 0" rotation="0 90 -45" scale="0.05 0.05 0.05"
+        animation-mixer="clip: Armature|Triceratops_Walk"></a-entity>
+      <a-entity id="triceraSound" sound="src: #triceraRoar; autoplay: false; loop: true; volume: 1"></a-entity>
+      <a-entity id="dialogTricera" visible="false" position="0 1.2 -0.5" rotation="-30 0 0">
+        <a-plane id="bgTricera" color="black" width="2" height="0.5" position="0 0 0"
+          material="shader: flat; opacity: 0.75; side: double;"></a-plane>
+        <a-entity id="tailTricera" geometry="primitive: triangle; vertexA: -0.2 0 0; vertexB: 0 -0.2 0; vertexC: 0.2 0 0"
+          position="0.6 -0.35 0.01"
+          material="color: black; shader: flat; opacity: 0.7; transparent: true; side: double"></a-entity>
+        <a-text id="textTricera" value="" align="center" color="white" position="0 0 0.01" width="2" opacity="1"
+          side="double"></a-text>
+      </a-entity>
+    </a-marker>
+
+    <!-- 3. アパトサウルス -->
+    <a-marker type="pattern" url="./assets/patt/pattern-apatosaurus.patt">
+      <a-entity id="apato" gltf-model="#apato" position="0 0 0" rotation="0 90 -45" scale="0.05 0.05 0.05"
+        animation-mixer="clip: Armature|Apatosaurus_Jump"></a-entity>
+      <a-entity id="apatoSound" sound="src: #apatoRoar; autoplay: false; loop: true; volume: 1"></a-entity>
+      <a-entity id="dialogApato" visible="false" position="0 1.2 -0.5" rotation="-30 0 0">
+        <a-plane id="bgApato" color="black" width="2" height="0.5" position="0 0 0"
+          material="shader: flat; opacity: 0.75; side: double;"></a-plane>
+        <a-entity id="tailApato" geometry="primitive: triangle; vertexA: -0.2 0 0; vertexB: 0 -0.2 0; vertexC: 0.2 0 0"
+          position="0.6 -0.35 0.01"
+          material="color: black; shader: flat; opacity: 0.7; transparent: true; side: double"></a-entity>
+        <a-text id="textApato" value="" align="center" color="white" position="0 0 0.01" width="2" opacity="1"
+          side="double"></a-text>
+      </a-entity>
+    </a-marker>
+
+    <!-- 4. ステゴサウルス -->
+    <a-marker type="pattern" url="./assets/patt/pattern-stegosaurus.patt">
+      <a-entity id="stego" gltf-model="#stego" position="0 0 0" rotation="0 90 -45" scale="0.05 0.05 0.05"
+        animation-mixer="clip: Armature|Stegosaurus_Death"></a-entity>
+      <a-entity id="stegoSound" sound="src: #stegoRoar; autoplay: false; loop: true; volume: 1"></a-entity>
+      <a-entity id="dialogStego" visible="false" position="0 1.2 -0.5" rotation="-30 0 0">
+        <a-plane id="bgStego" color="black" width="2" height="0.5" position="0 0 0"
+          material="shader: flat; opacity: 0.75; side: double;"></a-plane>
+        <a-entity id="tailStego" geometry="primitive: triangle; vertexA: -0.2 0 0; vertexB: 0 -0.2 0; vertexC: 0.2 0 0"
+          position="0.6 -0.35 0.01"
+          material="color: black; shader: flat; opacity: 0.7; transparent: true; side: double"></a-entity>
+        <a-text id="textStego" value="" align="center" color="white" position="0 0 0.01" width="2" opacity="1"
+          side="double"></a-text>
+      </a-entity>
+    </a-marker>
+
+    <!-- カメラ（スマホやPCのカメラでマーカーを映す） -->
+    <a-entity camera position="0 0 0"></a-entity>
+  </a-scene>
+
+  <script>
+    // 恐竜の音声を再生・停止するための関数
+    function setupMarkerSound(markerSelector, soundSelector) {
+      const marker = document.querySelector(markerSelector);
+      const soundEntity = document.querySelector(soundSelector);
+
+      marker.addEventListener("markerFound", () => {
+        if (soundEntity.components.sound) {
+          soundEntity.components.sound.playSound();
+        }
+      });
+
+      marker.addEventListener("markerLost", () => {
+        if (soundEntity.components.sound) {
+          soundEntity.components.sound.stopSound();
+        }
+      });
+    }
+
+    // 吹き出しセリフの制御関数（恐竜ごと）
+    function setupDialog(markerSelector, groupId, textId, bgId, tailId, messages) {
+      const marker = document.querySelector(markerSelector);
+      const group = document.querySelector(groupId);
+      const text = document.querySelector(textId);
+      const bg = document.querySelector(bgId);
+      const tail = document.querySelector(tailId);
+
+      let step = 0;
+      let timer = null;
+
+      marker.addEventListener("markerFound", () => {
+        step = 0;
+        group.setAttribute("visible", true);
+        text.setAttribute("value", messages[0]);
+        text.removeAttribute("animation");
+        bg.removeAttribute("animation");
+        tail.removeAttribute("animation");
+        text.setAttribute("opacity", 1);
+        bg.setAttribute("material", "opacity: 0.75");
+        tail.setAttribute("material", "opacity: 0.7");
+
+        timer = setInterval(() => {
+          step++;
+          if (step < messages.length) {
+            text.setAttribute("value", messages[step]);
+          } else {
+            clearInterval(timer);
+            text.setAttribute("animation", { property: "opacity", to: 0, dur: 1000 });
+            bg.setAttribute("animation", { property: "material.opacity", to: 0, dur: 1000 });
+            tail.setAttribute("animation", { property: "material.opacity", to: 0, dur: 1000 });
+            setTimeout(() => {
+              group.setAttribute("visible", false);
+            }, 1100);
+          }
+        }, 2000);
+      });
+
+      marker.addEventListener("markerLost", () => {
+        clearInterval(timer);
+        group.setAttribute("visible", false);
+      });
+    }
+
+    // それぞれのマーカーごとに音声制御をセット
+    setupMarkerSound("[url$='pattern-t-rex.patt']", "#trexSound");
+    setupMarkerSound("[url$='pattern-triceratops.patt']", "#triceraSound");
+    setupMarkerSound("[url$='pattern-apatosaurus.patt']", "#apatoSound");
+    setupMarkerSound("[url$='pattern-stegosaurus.patt']", "#stegoSound");
+
+    // 各恐竜のセリフ（英語）とその日本語訳（コメント）
+    setupDialog("[url$='pattern-t-rex.patt']", "#dialogTrex", "#textTrex", "#bgTrex", "#tailTrex", [
+      "The King Returns.",              // 王の帰還
+      "65 million years later...",     // 6500万年後…
+      "He's not extinct after all!"    // 実は絶滅していなかった！
+    ]);
+
+    setupDialog("[url$='pattern-triceratops.patt']", "#dialogTricera", "#textTricera", "#bgTricera", "#tailTricera", [
+      "Triceratops awakens.",          // トリケラトプスが目覚める
+      "Peaceful... but powerful.",     // 穏やか…でも強い
+      "Ready to defend!"               // 守る準備はできている！
+    ]);
+
+    setupDialog("[url$='pattern-apatosaurus.patt']", "#dialogApato", "#textApato", "#bgApato", "#tailApato", [
+      "Apatosaurus arrives.",          // アパトサウルスが現れる
+      "Graceful and giant.",           // 優雅で巨大
+      "Walking through time."          // 時代を歩く！
+    ]);
+
+    setupDialog("[url$='pattern-stegosaurus.patt']", "#dialogStego", "#textStego", "#bgStego", "#tailStego", [
+      "Stegosaurus appears.",          // ステゴサウルスが登場
+      "Spiky but calm.",               // トゲトゲしいけど穏やか
+      "A legend revived."              // 伝説がよみがえる！
+    ]);
+  </script>
+</body>
+
+</html>
